@@ -12,6 +12,8 @@
 
 This action aliases the Preview URLs of Vercel to the Target URL that you provide. It is advised to use it as part of your CI/CD efforts.
 
+Optionally sets the Target URL as an env var in Vercel for the current branch.
+
 ## About Vercel
 
 [​Vercel](https://vercel.com) is a cloud platform for **static sites** and **Serverless Functions** that fits perfectly with your workflow. It enables developers to host **Jamstack** websites and web services that **deploy instantly**, **scale automatically**, and requires **no supervision**, all with **no configuration**.
@@ -20,10 +22,12 @@ This action aliases the Preview URLs of Vercel to the Target URL that you provid
 
 | Name               | Required | Description                                                                                                                                            |
 | ------------------ | :------: | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| vercel-token       |   [x]    | Vercel token. see https://vercel.com/account/tokens                                                                                                    |
-| vercel-preview-url |   [x]    | Preview URL that you want to alias. If you use Vercel GitHub App, you can configure to a GitHub event e.g. `github.event.deployment_status.target_url` |
-| vercel-target-url  |   [x]    | Target URL that you want e.g. `beta.example.com`                                                                                                       |
-| vercel-scope       |   [ ]    | If you are working in a team scope, you should set this value to your `team ID`.                                                                       |
+| vercel-token                      |   [x]    | Vercel token. see https://vercel.com/account/tokens                                                                                                    |
+| vercel-preview-url                |   [x]    | Preview URL that you want to alias. If you use Vercel GitHub App, you can configure to a GitHub event e.g. `github.event.deployment_status.target_url` |
+| vercel-target-url                 |   [x]    | Target URL that you want e.g. `beta.example.com`                                                                                                       |
+| vercel-scope                      |   [ ]    | If you are working in a team scope, you should set this value to your `team ID`.                                                                       |
+| vercel-preview-url-env-var        |   [ ]    | If provided, the `vercel-target-url` will be stored in this env var for the current branch in Vercel                                                                       |
+| vercel-preview-url-env-var-branch |   [ ]    | If `vercel-preview-url-env-var` is provided then this must also. Should be the branch on which we will apply the env var in Vercel. (e.g feature/xxx or some-branch)                                                                       |
 
 ## Outputs
 

@@ -7,10 +7,38 @@ const { context } = github;
 // Vercel
 const vercelToken = core.getInput("vercel-token", { required: true });
 const vercelPreviewUrl = core.getInput("vercel-preview-url", {
-  required: true
+  required: true,
 });
 const vercelTargetUrl = core.getInput("vercel-target-url", { required: true });
 const vercelScope = core.getInput("vercel-scope");
+const vercelPreviewUrlEnvVar = core.getInput("vercel-preview-url-env-var");
+const vercelPreviewUrlEnvVarBranch = core.getInput(
+  "vercel-preview-url-env-var-branch"
+);
+
+if (vercelPreviewUrlEnvVar && !vercelPreviewUrlEnvVarBranch) {
+  throw Error(
+    "If using vercel-target-url-env-var then you must set vercel-target-url-env-var-branch"
+  );
+}
+
+async function setTargetUrlEnvVar() {
+  core.info("Setting target url: " + vercelPreviewUrlEnvVar);
+  core.info("Branch: " + vercelPreviewUrlEnvVarBranch);
+  const argsArray = [
+    "vercel",
+    "env",
+    "add",
+    vercelPreviewUrlEnvVar,
+    vercelTargetUrl,
+    "preview",
+    vercelPreviewUrlEnvVarBranch,
+    "-t",
+    vercelToken,
+  ];
+
+  await exec.exec("npx", argsArray, options);
+}
 
 async function vercelAlias() {
   let myOutput = "";
@@ -18,15 +46,19 @@ async function vercelAlias() {
   let myError = "";
   const options = {};
   options.listeners = {
-    stdout: data => {
+    stdout: (data) => {
       myOutput += data.toString();
       core.info(data.toString());
     },
-    stderr: data => {
+    stderr: (data) => {
       myError += data.toString();
       core.info(data.toString());
-    }
+    },
   };
+
+  if (vercelPreviewUrlEnvVar) {
+    await setTargetUrlEnvVar();
+  }
 
   const argsArray = [
     "vercel",
@@ -34,7 +66,7 @@ async function vercelAlias() {
     vercelPreviewUrl,
     vercelTargetUrl,
     "-t",
-    vercelToken
+    vercelToken,
   ];
 
   if (vercelScope) {
@@ -65,6 +97,6 @@ async function run() {
   }
 }
 
-run().catch(error => {
+run().catch((error) => {
   core.setFailed(error.message);
 });

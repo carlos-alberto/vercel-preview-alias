@@ -13,6 +13,12 @@ inputs:
   vercel-scope:
     required: false
     description: "If in a Team, the scope of the team"
+  vercel-preview-url-env-var:
+    required: false
+    description: "If provided, the `vercel-target-url` will be stored in this env var for the current branch in Vercel"
+  vercel-preview-url-env-var-branch:
+    required: false
+    description: "If `vercel-preview-url-env-var` is provided then this must also. Should be the branch on which we will apply the env var in Vercel. (e.g feature/xxx or some-branch)"
 outputs:
   success:
     description: "Is true if the aliasing is successful"

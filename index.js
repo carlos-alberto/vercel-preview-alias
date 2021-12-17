@@ -37,7 +37,9 @@ async function setTargetUrlEnvVar() {
     vercelToken,
   ];
 
-  await exec.exec("npx", argsArray, options);
+  await exec.exec(
+    `/bin/bash -c "echo \"${vercelTargetUrl}\" | npx vercel env add ${vercelPreviewUrlEnvVar} preview ${vercelPreviewUrlEnvVarBranch} -t ${vercelToken} --scope ${vercelScope}"`
+  );
 }
 
 async function vercelAlias() {
